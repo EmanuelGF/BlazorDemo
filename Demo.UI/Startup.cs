@@ -30,7 +30,8 @@ namespace Demo.UI
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddHttpClient<IProductsService, ProductsService>(client => {
+            services.AddHttpClient<IProductsService, ProductsService>(
+                client => {
                 client.BaseAddress = new Uri("https://localhost:44337/");
             });
             

@@ -1,9 +1,9 @@
 ﻿using Demo.DataModels;
-using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace Demo.UI.Services
@@ -18,7 +18,9 @@ namespace Demo.UI.Services
         }
         public async Task<IEnumerable<Product>> getProducts()
         {
-            return await httpClient.GetJsonAsync<Product[]>("api/product/getProducts");
+            //Should probably be inside a try catch. 
+            return await httpClient.GetFromJsonAsync<Product[]>("api/product/getProducts");
+            
         }
     }
 }
