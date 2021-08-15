@@ -4,57 +4,71 @@
 @using Demo.UI.Services
 @inject IProductsService _productsService
 
-
-
 @code {
 
     private IEnumerable<Product> Data = null;
+    string errorString;
     protected override async Task OnInitializedAsync()
     {
-        //call the API
+        //call our API
         await base.OnInitializedAsync();
-        Data = await _productsService.getProducts();
+        try
+        {
+            Data = await _productsService.getProducts();
+        }
+        catch (Exception e)
+        {
+
+            errorString = $"There was a problem retrieving the data: {e.Message}";
+        }
 
 
     }
 }
 <!--#endregion-->
 
+
 <!--#region html-->
-<h3>GridView</h3>
- @if(Data is null)
+<h3>Here are some products.</h3>
+
+@if (string.IsNullOrWhiteSpace(errorString) == false)
             {
-                <h1>Loading the thing...</h1>
+                <h2>@errorString</h2>
             }
+
+else if (Data is null)
+{
+<div class="spinner-grow text-warning" role="status">
+    <span class="sr-only">Loading...</span>
+</div>
+}
 else
 {
-               
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Product Name</th>
-                                <th>Product Price</th>
-                                <th>Product Quantity</th>
-                                <th>Product Brand</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Data)
-                            {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.Name</td>
-                                <td>@item.Brand</td>
-                                <td>@item.Price</td>
-                                <td>@item.Quantity</td>
-                            </tr>
-                               
-                            }
-                        </tbody>
-                    </table>
-                
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Product Name</th>
+                <th>Product Price</th>
+                <th>Product Quantity</th>
+                <th>Product Brand</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Data)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Brand</td>
+                    <td>@item.Price</td>
+                    <td>@item.Quantity</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
 }
-
-
 <!--#endregion-->

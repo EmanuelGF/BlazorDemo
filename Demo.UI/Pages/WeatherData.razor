@@ -1,0 +1,71 @@
+﻿<!--#region CODE-->
+@page "/forecast"
+@using Demo.DataModels
+@using Demo.UI.Services
+@inject IForecastService _forecastService
+
+@code {
+    private WeatherForecastModel forecast = null;
+    string errorString;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //call our API
+
+        await base.OnInitializedAsync();
+        try
+        {
+            forecast = await _forecastService.getForecast();
+        }
+        catch (Exception e)
+        {
+
+            errorString = $"Could not retrieve the data: {e.Message}";
+        }
+
+    }
+}
+<!--#end region-->
+
+
+<!--#region HTML-->
+<h3>WeatherData for Lisbon - Portugal</h3>
+
+@if(string.IsNullOrWhiteSpace(errorString) == false)
+            {
+    <h2>@errorString</h2>
+            }
+else if (forecast is null)
+{
+    <div class="spinner-grow text-warning" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+else
+{
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Date</th>
+                <th>Weather State</th>
+                <th>Low </th>
+                <th>High</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in forecast.Consolidated_weather)
+            {
+                <tr>
+                    <td>@item.applicable_date</td>
+                    <td>@item.weather_state_name</td>
+                    <td>@item.min_temp</td>
+                    <td>@item.max_temp</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+}
+<!--#end region-->

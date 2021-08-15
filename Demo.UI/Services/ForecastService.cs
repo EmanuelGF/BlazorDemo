@@ -8,20 +8,19 @@ using System.Threading.Tasks;
 
 namespace Demo.UI.Services
 {
-    public class ProductsService : IProductsService
+    public class ForecastService : IForecastService
     {
         private readonly HttpClient httpClient;
 
-        public ProductsService(HttpClient _httpClient)
+        public ForecastService(HttpClient _httpClient)
         {
             this.httpClient = _httpClient;
         }
-        public async Task<IEnumerable<Product>> getProducts()
+        public async Task<WeatherForecastModel> getForecast()
         {
-
             //Call the api and retrieve the list of products.
-            return await httpClient.GetFromJsonAsync<Product[]>("api/product/getProducts");
 
+            return await httpClient.GetFromJsonAsync<WeatherForecastModel>("https://www.metaweather.com/api/location/742676/");
         }
     }
 }
