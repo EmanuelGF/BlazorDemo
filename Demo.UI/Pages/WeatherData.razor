@@ -10,7 +10,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //call our API
+        //call to the external API
 
         await base.OnInitializedAsync();
         try
@@ -19,7 +19,7 @@
         }
         catch (Exception e)
         {
-
+            //Should show the 404 message from the error message.
             errorString = $"Could not retrieve the data: {e.Message}";
         }
 
